@@ -46,8 +46,8 @@ def set_styles_with_shadow(url):
     )
 
 # Background custom dengan URL
-set_background("https://images7.alphacoders.com/926/926408.png")
-set_styles_with_shadow("https://images7.alphacoders.com/926/926408.png")
+set_background("https://images2.alphacoders.com/686/686406.jpg")
+set_styles_with_shadow("https://images2.alphacoders.com/686/686406.jpg")
 
 # Judul aplikasi
 st.title("Evaluasi Model Klasifikasi Kualitas Air")
