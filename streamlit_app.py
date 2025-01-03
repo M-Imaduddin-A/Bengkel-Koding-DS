@@ -84,7 +84,7 @@ if data is not None:
     # Preprocessing
     data.fillna(data.mean(), inplace=True)
     X = data.drop(columns=["Potability"])
-    y = data["Potability"])
+    y = data["Potability"]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     # Normalisasi Opsional
