@@ -22,6 +22,21 @@ def plot_confusion_matrix(cm, labels):
     plt.title("Confusion Matrix")
     st.pyplot(fig)
 
+# Fungsi untuk menampilkan heatmap
+def plot_heatmap(data):
+    corr = data.corr()
+    fig, ax = plt.subplots(figsize=(10, 8))
+    sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
+    plt.title("Heatmap Korelasi")
+    st.pyplot(fig)
+
+# Fungsi untuk menampilkan distribusi data
+def plot_distribution(data):
+    fig, ax = plt.subplots(figsize=(12, 8))
+    data.hist(bins=20, color="skyblue", edgecolor="black", ax=ax)
+    plt.tight_layout()
+    st.pyplot(fig)
+
 # Memuat dataset
 @st.cache_data
 def load_data_from_github():
@@ -53,6 +68,19 @@ data.fillna(data.mean(), inplace=True)
 # Menampilkan informasi dataset
 st.write(f"Jumlah data: {data.shape[0]} baris, {data.shape[1]} kolom")
 st.write("Kolom:", list(data.columns))
+
+# Tombol untuk menampilkan heatmap korelasi
+if st.button("Tampilkan Heatmap Korelasi"):
+    plot_heatmap(data)
+
+# Tombol untuk menampilkan distribusi data
+if st.button("Tampilkan Distribusi Data"):
+    st.write("### Distribusi Data")
+    for column in data.columns[:-1]:  # Exclude Potability
+        fig, ax = plt.subplots(figsize=(6, 4))
+        sns.histplot(data[column], kde=True, bins=20, color="blue", ax=ax)
+        plt.title(f"Distribusi {column}")
+        st.pyplot(fig)
 
 # Split data
 X = data.drop(columns=["Potability"])
@@ -99,3 +127,14 @@ ax.set_title("Perbandingan Akurasi Model")
 ax.set_ylabel("Akurasi")
 ax.set_xlabel("Model")
 st.pyplot(fig)
+
+# Kesimpulan
+st.write("### Kesimpulan")
+best_model = max(accuracies, key=accuracies.get)
+st.write(f"Model dengan akurasi tertinggi adalah **{best_model}** dengan akurasi **{accuracies[best_model]:.2f}**.")
+st.write("""
+- **Keunggulan Random Forest**: Mampu menangani dataset dengan banyak fitur dan mengurangi overfitting.
+- **Keterbatasan Logistic Regression**: Tidak cocok untuk dataset yang tidak linier.
+- **Kelebihan SVM**: Cocok untuk dataset kecil dengan pemisahan linier.
+""")
+st.write(f"Rekomendasi: Gunakan **{best_model}** untuk kasus ini karena memberikan akurasi terbaik.")
