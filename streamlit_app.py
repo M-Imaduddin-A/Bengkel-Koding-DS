@@ -26,7 +26,7 @@ def set_background(url):
         unsafe_allow_html=True
     )
 # Tambahkan CSS untuk mengganti background dan warna font
-def set_styles(url):
+def set_styles_with_dim(url):
     st.markdown(
         f"""
         <style>
@@ -38,16 +38,16 @@ def set_styles(url):
         }}
         .stApp * {{
             color: red; /* Mengatur semua teks menjadi merah */
+            opacity: 0.8; /* Menambahkan efek dim pada teks */
         }}
         </style>
         """,
         unsafe_allow_html=True
     )
 
-
 # Background custom dengan URL
 set_background("https://images7.alphacoders.com/926/926408.png")
-set_styles("https://images7.alphacoders.com/926/926408.png")
+set_styles_with_dim("https://images7.alphacoders.com/926/926408.png")
 
 # Judul aplikasi
 st.title("Evaluasi Model Klasifikasi Kualitas Air")
