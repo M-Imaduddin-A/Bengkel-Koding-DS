@@ -11,6 +11,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, confusion_matrix
 
 # Tambahkan CSS untuk mengganti background
+# Tambahkan CSS untuk mengganti background
 def set_background(url):
     st.markdown(
         f"""
@@ -25,6 +26,7 @@ def set_background(url):
         """,
         unsafe_allow_html=True
     )
+
 # Tambahkan CSS untuk mengganti background dan warna font
 def set_styles_with_thick_shadow(url):
     st.markdown(
@@ -37,8 +39,8 @@ def set_styles_with_thick_shadow(url):
             background-repeat: no-repeat;
         }}
         .stApp * {{
-            color: yellow; /* Warna teks kuning */
-            text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Bayangan lebih tebal */
+            color: #fdfcfc; /* Warna teks putih terang */
+            text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Bayangan tebal hitam */
         }}
         </style>
         """,
