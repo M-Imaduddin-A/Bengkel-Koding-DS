@@ -55,15 +55,6 @@ def plot_heatmap(data):
     plt.title("Heatmap Korelasi")
     st.pyplot(fig)
 
-def plot_histograms(data):
-    fig, axes = plt.subplots(nrows=5, ncols=2, figsize=(12, 20))
-    axes = axes.flatten()
-    for i, col in enumerate(data.columns):
-        sns.histplot(data[col], ax=axes[i], kde=True, color='skyblue')
-        axes[i].set_title(f'Distribusi {col}')
-    plt.tight_layout()
-    st.pyplot(fig)
-
 def plot_accuracies(accuracies):
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.bar(accuracies.keys(), accuracies.values(), color='skyblue')
@@ -86,13 +77,12 @@ def load_data():
 # --- Aplikasi Utama ---
 set_styles_with_thick_shadow("https://images7.alphacoders.com/926/926408.png")
 
-st.title("Evaluasi Model Klasifikasi Kualitas Air")
+st.write("**<span class='highlight-text'>Evaluasi Model Klasifikasi Kualitas Air</span>**", unsafe_allow_html=True)
 
-# Load Data
 data = load_data()
 if data is not None:
-    st.write(f"Jumlah data: {data.shape[0]} baris, {data.shape[1]} kolom")
-    st.write("Pratinjau dataset:")
+    st.write(f"**<span class='highlight-text'>Jumlah data: {data.shape[0]} baris, {data.shape[1]} kolom</span>**", unsafe_allow_html=True)
+    st.write("**<span class='highlight-text'>Pratinjau dataset:</span>**", unsafe_allow_html=True)
     st.dataframe(data.head())
 
     # Preprocessing
@@ -108,14 +98,6 @@ if data is not None:
         X_train = scaler.fit_transform(X_train)
         X_test = scaler.transform(X_test)
     
-    # Tombol untuk menampilkan Heatmap
-    if st.button("Tampilkan Heatmap"):
-        plot_heatmap(data)
-    
-    # Tombol untuk menampilkan Histogram
-    if st.button("Tampilkan Histogram"):
-        plot_histograms(data)
-    
     # Model
     models = {
         "Random Forest": RandomForestClassifier(random_state=42),
@@ -123,7 +105,7 @@ if data is not None:
         "Support Vector Machine": SVC(kernel='linear', random_state=42)
     }
     
-    st.write("### Evaluasi Model")
+    st.write("**<span class='highlight-text'>Evaluasi Model</span>**", unsafe_allow_html=True)
     accuracies = {}
     for model_name, model in models.items():
         model.fit(X_train, y_train)
@@ -136,12 +118,10 @@ if data is not None:
         cm = confusion_matrix(y_test, y_pred)
         plot_confusion_matrix(cm, ["Not Potable", "Potable"])
     
-    # Plot Akurasi
-    st.write("### Perbandingan Akurasi")
+    st.write("**<span class='highlight-text'>Perbandingan Akurasi</span>**", unsafe_allow_html=True)
     plot_accuracies(accuracies)
     
-    # Kesimpulan
-    st.write("### Kesimpulan")
+    st.write("**<span class='highlight-text'>Kesimpulan</span>**", unsafe_allow_html=True)
     best_model = max(accuracies, key=accuracies.get)
     st.write(f"Model dengan akurasi tertinggi adalah **<span class='highlight-text'>{best_model}</span>** dengan akurasi **{accuracies[best_model]:.2f}**.", unsafe_allow_html=True)
 else:
