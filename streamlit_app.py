@@ -25,6 +25,25 @@ def set_background(url):
         """,
         unsafe_allow_html=True
     )
+# Tambahkan CSS untuk mengganti background dan warna font
+def set_styles(url):
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url({url});
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }}
+        .stApp * {{
+            color: red; /* Mengatur semua teks menjadi merah */
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
 
 # Background custom dengan URL
 set_background("https://images7.alphacoders.com/926/926408.png")
