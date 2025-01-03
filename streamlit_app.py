@@ -41,12 +41,12 @@ def set_styles_with_thick_shadow(url):
        /* Warna teks biru pekat dan bayangan ringan untuk elemen umum */
         .stApp * {{
             color: #00008B; /* Biru pekat */
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5); /* Bayangan ringan */
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8); /* Bayangan putih */
         }}
         /* Elemen output (kode, markdown, tabel) tanpa bayangan */
         pre, code, .stMarkdown, .stDataFrame {{
             text-shadow: none; /* Tanpa bayangan */
-            color: #00008B; /* Tetap biru pekat */
+            color: blue; /* Text code warna biru */
         </style>
         """,
         unsafe_allow_html=True
