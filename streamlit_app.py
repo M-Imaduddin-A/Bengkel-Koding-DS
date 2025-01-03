@@ -26,7 +26,7 @@ def set_background(url):
         unsafe_allow_html=True
     )
 # Tambahkan CSS untuk mengganti background dan warna font
-def set_styles_with_shadow(url):
+def set_styles_with_thick_shadow(url):
     st.markdown(
         f"""
         <style>
@@ -37,8 +37,8 @@ def set_styles_with_shadow(url):
             background-repeat: no-repeat;
         }}
         .stApp * {{
-            color: blue; /* Warna biru */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Menambahkan bayangan gelap pada teks */
+            color: blue; /* Warna teks biru */
+            text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Bayangan lebih tebal */
         }}
         </style>
         """,
@@ -47,7 +47,7 @@ def set_styles_with_shadow(url):
 
 # Background custom dengan URL
 set_background("https://images2.alphacoders.com/686/686406.jpg")
-set_styles_with_shadow("https://images2.alphacoders.com/686/686406.jpg")
+set_styles_with_thick_shadow("https://images2.alphacoders.com/686/686406.jpg")
 
 # Judul aplikasi
 st.title("Evaluasi Model Klasifikasi Kualitas Air")
