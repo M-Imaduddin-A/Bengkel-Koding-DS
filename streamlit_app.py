@@ -39,7 +39,6 @@ def set_styles_with_shadow(url):
         .stApp * {{
             color: red; /* Warna teks tetap merah */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Menambahkan bayangan gelap pada teks */
-            opacity: 0.9; /* Sedikit transparansi */
         }}
         </style>
         """,
