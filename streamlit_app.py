@@ -64,6 +64,12 @@ def plot_heatmap(data):
     plt.title("Heatmap Korelasi")
     st.pyplot(fig)
 
+def plot_histogram(data):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    data.hist(bins=30, figsize=(10, 8), color='skyblue', edgecolor='black')
+    plt.tight_layout()
+    st.pyplot(fig)
+
 def plot_accuracies(accuracies):
     fig, ax = plt.subplots(figsize=(8, 5))
     ax.bar(accuracies.keys(), accuracies.values(), color='skyblue')
@@ -130,6 +136,11 @@ if data is not None:
     
     st.write("**<span class='highlight-text'>Perbandingan Akurasi</span>**", unsafe_allow_html=True)
     plot_accuracies(accuracies)
+    
+    if st.button("Tampilkan Heatmap"):
+        plot_heatmap(data)
+    if st.button("Tampilkan Histogram Plot"):
+        plot_histogram(data)
     
     st.write("**<span class='highlight-text'>Kesimpulan</span>**", unsafe_allow_html=True)
     best_model = max(accuracies, key=accuracies.get)
