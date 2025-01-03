@@ -101,7 +101,8 @@ if data is not None:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     # Normalisasi Opsional
-    normalize = st.checkbox("<span class='green-text'>Gunakan Normalisasi</span>", unsafe_allow_html=True)
+    st.markdown("<span class='green-text'>Gunakan Normalisasi</span>", unsafe_allow_html=True)
+    normalize = st.checkbox("Aktifkan Normalisasi")
     if normalize:
         scaler = StandardScaler()
         X_train = scaler.fit_transform(X_train)
