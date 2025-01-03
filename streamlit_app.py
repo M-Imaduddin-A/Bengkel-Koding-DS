@@ -29,6 +29,11 @@ def set_styles_with_thick_shadow(url):
             text-shadow: none;
             color: #00008B;
         }}
+        .highlight-text {{
+            background-color: #FFFFE0;
+            padding: 4px;
+            border-radius: 4px;
+        }}
         </style>
         """,
         unsafe_allow_html=True
@@ -48,6 +53,15 @@ def plot_heatmap(data):
     fig, ax = plt.subplots(figsize=(10, 8))
     sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
     plt.title("Heatmap Korelasi")
+    st.pyplot(fig)
+
+def plot_histograms(data):
+    fig, axes = plt.subplots(nrows=5, ncols=2, figsize=(12, 20))
+    axes = axes.flatten()
+    for i, col in enumerate(data.columns):
+        sns.histplot(data[col], ax=axes[i], kde=True, color='skyblue')
+        axes[i].set_title(f'Distribusi {col}')
+    plt.tight_layout()
     st.pyplot(fig)
 
 def plot_accuracies(accuracies):
@@ -94,6 +108,14 @@ if data is not None:
         X_train = scaler.fit_transform(X_train)
         X_test = scaler.transform(X_test)
     
+    # Tombol untuk menampilkan Heatmap
+    if st.button("Tampilkan Heatmap"):
+        plot_heatmap(data)
+    
+    # Tombol untuk menampilkan Histogram
+    if st.button("Tampilkan Histogram"):
+        plot_histograms(data)
+    
     # Model
     models = {
         "Random Forest": RandomForestClassifier(random_state=42),
@@ -109,7 +131,7 @@ if data is not None:
         acc = accuracy_score(y_test, y_pred)
         accuracies[model_name] = acc
         
-        st.write(f"**{model_name}**")
+        st.write(f"**<span class='highlight-text'>{model_name}</span>**", unsafe_allow_html=True)
         st.write(f"Akurasi: {acc:.2f}")
         cm = confusion_matrix(y_test, y_pred)
         plot_confusion_matrix(cm, ["Not Potable", "Potable"])
@@ -121,7 +143,7 @@ if data is not None:
     # Kesimpulan
     st.write("### Kesimpulan")
     best_model = max(accuracies, key=accuracies.get)
-    st.write(f"Model dengan akurasi tertinggi adalah **{best_model}** dengan akurasi **{accuracies[best_model]:.2f}**.")
+    st.write(f"Model dengan akurasi tertinggi adalah **<span class='highlight-text'>{best_model}</span>** dengan akurasi **{accuracies[best_model]:.2f}**.", unsafe_allow_html=True)
 else:
     st.warning("Dataset tidak dapat dimuat. Silakan unggah file CSV.")
     uploaded_file = st.file_uploader("Upload dataset CSV Anda", type="csv")
