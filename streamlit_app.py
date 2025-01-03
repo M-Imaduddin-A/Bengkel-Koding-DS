@@ -24,11 +24,31 @@ def plot_confusion_matrix(cm, labels):
 
 # Memuat dataset
 @st.cache
-def load_data():
-    # Contoh data dummy (gunakan dataset Anda di sini)
-    data = pd.read_csv("water_quality.csv")  # Ganti dengan path dataset Anda
-    return data
+def load_data_from_github():
+    url = "https://github.com/M-Imaduddin-A/Bengkel-Koding-DS/blob/main/data/water_potability.csv"
+    try:
+        data = pd.read_csv(url)
+        return data
+    except Exception as e:
+        st.error(f"Gagal memuat dataset dari GitHub: {e}")
+        return None
 
+st.title("Evaluasi Model Klasifikasi Kualitas Air")
+
+# Load data dari GitHub
+data = load_data_from_github()
+
+# Fallback jika data dari GitHub gagal
+if data is None:
+    uploaded_file = st.file_uploader("Upload dataset CSV Anda", type="csv")
+    if uploaded_file:
+        data = pd.read_csv(uploaded_file)
+        st.write("Dataset berhasil dimuat!")
+    else:
+        st.warning("Silakan upload file dataset atau pastikan koneksi internet tersedia.")
+else:
+    st.write("Dataset berhasil dimuat dari GitHub!")
+    st.write(data.head())
 data = load_data()
 
 # Menampilkan data
