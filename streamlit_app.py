@@ -21,7 +21,12 @@ def set_styles_with_thick_shadow(url):
             background-position: center;
             background-repeat: no-repeat;
         }}
-        h1, h2, h3, h4, h5, h6 {{
+        h1 {{
+            font-size: 36px;
+            color: #00008B;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+        }}
+        h2, h3, h4, h5, h6 {{
             color: #00008B;
             text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
         }}
@@ -33,6 +38,10 @@ def set_styles_with_thick_shadow(url):
             background-color: #FFFFE0;
             padding: 4px;
             border-radius: 4px;
+        }}
+        .green-text {{
+            color: #006400;
+            font-weight: bold;
         }}
         </style>
         """,
@@ -77,7 +86,7 @@ def load_data():
 # --- Aplikasi Utama ---
 set_styles_with_thick_shadow("https://images7.alphacoders.com/926/926408.png")
 
-st.write("**<span class='highlight-text'>Evaluasi Model Klasifikasi Kualitas Air</span>**", unsafe_allow_html=True)
+st.markdown("# **Evaluasi Model Klasifikasi Kualitas Air**", unsafe_allow_html=True)
 
 data = load_data()
 if data is not None:
@@ -92,7 +101,7 @@ if data is not None:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     # Normalisasi Opsional
-    normalize = st.checkbox("Gunakan Normalisasi")
+    normalize = st.checkbox("<span class='green-text'>Gunakan Normalisasi</span>", unsafe_allow_html=True)
     if normalize:
         scaler = StandardScaler()
         X_train = scaler.fit_transform(X_train)
