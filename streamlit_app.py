@@ -10,24 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, confusion_matrix
 
-# Tambahkan CSS untuk mengganti background
-# Tambahkan CSS untuk mengganti background
-def set_background(url):
-    st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background-image: url({url});
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-# Tambahkan CSS untuk mengganti background dan warna font
+# --- Fungsi Styling ---
 def set_styles_with_thick_shadow(url):
     st.markdown(
         f"""
@@ -38,30 +21,20 @@ def set_styles_with_thick_shadow(url):
             background-position: center;
             background-repeat: no-repeat;
         }}
-      /* Warna teks biru pekat dan bayangan ringan untuk elemen umum */
-        .stApp * {{
-            color: #00008B; /* Biru pekat */
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5); /* Bayangan ringan */
+        h1, h2, h3, h4, h5, h6 {{
+            color: #00008B;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
         }}
-        /* Elemen output (kode, markdown, tabel) tanpa bayangan */
         pre, code, .stMarkdown, .stDataFrame {{
-            text-shadow: none; /* Tanpa bayangan */
-            color: #00008B; /* Tetap biru pekat */
+            text-shadow: none;
+            color: #00008B;
+        }}
         </style>
         """,
         unsafe_allow_html=True
     )
 
-# Background custom dengan URL
-set_background("https://images7.alphacoders.com/926/926408.png")
-set_styles_with_thick_shadow("https://images7.alphacoders.com/926/926408.png")
-
-# Judul aplikasi
-st.title("Evaluasi Model Klasifikasi Kualitas Air")
-st.write("Selamat datang di aplikasi analisis kualitas air!")
-
-
-# Fungsi untuk menampilkan confusion matrix
+# --- Fungsi Visualisasi ---
 def plot_confusion_matrix(cm, labels):
     fig, ax = plt.subplots(figsize=(6, 4))
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=labels, yticklabels=labels, cbar=False)
@@ -70,7 +43,6 @@ def plot_confusion_matrix(cm, labels):
     plt.title("Confusion Matrix")
     st.pyplot(fig)
 
-# Fungsi untuk menampilkan heatmap
 def plot_heatmap(data):
     corr = data.corr()
     fig, ax = plt.subplots(figsize=(10, 8))
@@ -78,111 +50,81 @@ def plot_heatmap(data):
     plt.title("Heatmap Korelasi")
     st.pyplot(fig)
 
-# Fungsi untuk menampilkan distribusi data
-def plot_distribution(data):
-    fig, ax = plt.subplots(figsize=(12, 8))
-    data.hist(bins=20, color="skyblue", edgecolor="black", ax=ax)
-    plt.tight_layout()
+def plot_accuracies(accuracies):
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.bar(accuracies.keys(), accuracies.values(), color='skyblue')
+    ax.set_ylim(0, 1)
+    ax.set_title("Perbandingan Akurasi Model")
+    ax.set_ylabel("Akurasi")
+    ax.set_xlabel("Model")
     st.pyplot(fig)
 
-# Memuat dataset
+# --- Load Dataset ---
 @st.cache_data
-def load_data_from_github():
-    url = "https://raw.githubusercontent.com/M-Imaduddin-A/Bengkel-Koding-DS/main/data/water_potability.csv"
+def load_data():
     try:
-        data = pd.read_csv(url)
-        return data
+        url = "https://raw.githubusercontent.com/M-Imaduddin-A/Bengkel-Koding-DS/main/data/water_potability.csv"
+        return pd.read_csv(url)
     except Exception as e:
-        st.error(f"Gagal memuat dataset dari GitHub: {e}")
+        st.error(f"Gagal memuat dataset: {e}")
         return None
 
-# Load data dari GitHub
-data = load_data_from_github()
+# --- Aplikasi Utama ---
+set_styles_with_thick_shadow("https://images7.alphacoders.com/926/926408.png")
 
-# Fallback jika data dari GitHub gagal
-if data is None:
+st.title("Evaluasi Model Klasifikasi Kualitas Air")
+
+# Load Data
+data = load_data()
+if data is not None:
+    st.write(f"Jumlah data: {data.shape[0]} baris, {data.shape[1]} kolom")
+    st.write("Pratinjau dataset:")
+    st.dataframe(data.head())
+
+    # Preprocessing
+    data.fillna(data.mean(), inplace=True)
+    X = data.drop(columns=["Potability"])
+    y = data["Potability"])
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    # Normalisasi Opsional
+    normalize = st.checkbox("Gunakan Normalisasi")
+    if normalize:
+        scaler = StandardScaler()
+        X_train = scaler.fit_transform(X_train)
+        X_test = scaler.transform(X_test)
+    
+    # Model
+    models = {
+        "Random Forest": RandomForestClassifier(random_state=42),
+        "Logistic Regression": LogisticRegression(max_iter=1000, random_state=42),
+        "Support Vector Machine": SVC(kernel='linear', random_state=42)
+    }
+    
+    st.write("### Evaluasi Model")
+    accuracies = {}
+    for model_name, model in models.items():
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        acc = accuracy_score(y_test, y_pred)
+        accuracies[model_name] = acc
+        
+        st.write(f"**{model_name}**")
+        st.write(f"Akurasi: {acc:.2f}")
+        cm = confusion_matrix(y_test, y_pred)
+        plot_confusion_matrix(cm, ["Not Potable", "Potable"])
+    
+    # Plot Akurasi
+    st.write("### Perbandingan Akurasi")
+    plot_accuracies(accuracies)
+    
+    # Kesimpulan
+    st.write("### Kesimpulan")
+    best_model = max(accuracies, key=accuracies.get)
+    st.write(f"Model dengan akurasi tertinggi adalah **{best_model}** dengan akurasi **{accuracies[best_model]:.2f}**.")
+else:
+    st.warning("Dataset tidak dapat dimuat. Silakan unggah file CSV.")
     uploaded_file = st.file_uploader("Upload dataset CSV Anda", type="csv")
     if uploaded_file:
         data = pd.read_csv(uploaded_file)
         st.write("Dataset berhasil dimuat!")
-    else:
-        st.warning("Silakan upload file dataset atau pastikan koneksi internet tersedia.")
-else:
-    st.write("Dataset berhasil dimuat dari GitHub!")
-
-# Handling missing values
-data.fillna(data.mean(), inplace=True)
-
-# Menampilkan informasi dataset
-st.write(f"Jumlah data: {data.shape[0]} baris, {data.shape[1]} kolom")
-st.write("Kolom:", list(data.columns))
-
-# Tombol untuk menampilkan heatmap korelasi
-if st.button("Tampilkan Heatmap Korelasi"):
-    plot_heatmap(data)
-
-# Tombol untuk menampilkan distribusi data
-if st.button("Tampilkan Distribusi Data"):
-    st.write("### Distribusi Data")
-    for column in data.columns[:-1]:  # Exclude Potability
-        fig, ax = plt.subplots(figsize=(6, 4))
-        sns.histplot(data[column], kde=True, bins=20, color="blue", ax=ax)
-        plt.title(f"Distribusi {column}")
-        st.pyplot(fig)
-
-# Split data
-X = data.drop(columns=["Potability"])
-y = data["Potability"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Pilihan normalisasi
-normalize = st.checkbox("Gunakan Normalisasi")
-
-if normalize:
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
-
-# Model
-models = {
-    "Random Forest": RandomForestClassifier(random_state=42),
-    "Logistic Regression": LogisticRegression(max_iter=1000, random_state=42),
-    "Support Vector Machine": SVC(kernel='linear', random_state=42)
-}
-
-# Evaluasi model
-st.write("### Evaluasi Model")
-accuracies = {}
-for model_name, model in models.items():
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-    acc = accuracy_score(y_test, y_pred)
-    accuracies[model_name] = acc
-    
-    st.write(f"**{model_name}**")
-    st.write(f"Akurasi: {acc:.2f}")
-    
-    cm = confusion_matrix(y_test, y_pred)
-    plot_confusion_matrix(cm, ["Not Potable", "Potable"])
-
-# Visualisasi Akurasi
-st.write("### Perbandingan Akurasi")
-fig, ax = plt.subplots(figsize=(8, 5))
-colors = plt.cm.Paired.colors[:len(accuracies)]
-ax.bar(accuracies.keys(), accuracies.values(), color=colors)
-ax.set_ylim(0, 1)
-ax.set_title("Perbandingan Akurasi Model")
-ax.set_ylabel("Akurasi")
-ax.set_xlabel("Model")
-st.pyplot(fig)
-
-# Kesimpulan
-st.write("### Kesimpulan")
-best_model = max(accuracies, key=accuracies.get)
-st.write(f"Model dengan akurasi tertinggi adalah **{best_model}** dengan akurasi **{accuracies[best_model]:.2f}**.")
-st.write("""
-- **Keunggulan Random Forest**: Mampu menangani dataset dengan banyak fitur dan mengurangi overfitting.
-- **Keterbatasan Logistic Regression**: Tidak cocok untuk dataset yang tidak linier.
-- **Kelebihan SVM**: Cocok untuk dataset kecil dengan pemisahan linier.
-""")
-st.write(f"Rekomendasi: Gunakan **{best_model}** untuk kasus ini karena memberikan akurasi terbaik.")
