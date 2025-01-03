@@ -23,7 +23,7 @@ def plot_confusion_matrix(cm, labels):
     st.pyplot(fig)
 
 # Memuat dataset
-@st.cache
+@st.cache_data
 def load_data_from_github():
     url = "https://raw.githubusercontent.com/M-Imaduddin-A/Bengkel-Koding-DS/main/water_potability.csv"
     try:
@@ -32,8 +32,6 @@ def load_data_from_github():
     except Exception as e:
         st.error(f"Gagal memuat dataset dari GitHub: {e}")
         return None
-
-st.title("Evaluasi Model Klasifikasi Kualitas Air")
 
 # Load data dari GitHub
 data = load_data_from_github()
@@ -48,12 +46,13 @@ if data is None:
         st.warning("Silakan upload file dataset atau pastikan koneksi internet tersedia.")
 else:
     st.write("Dataset berhasil dimuat dari GitHub!")
-    st.write(data.head())
-data = load_data()
 
-# Menampilkan data
-st.write("### Dataset")
-st.write(data.head())
+# Handling missing values
+data.fillna(data.mean(), inplace=True)
+
+# Menampilkan informasi dataset
+st.write(f"Jumlah data: {data.shape[0]} baris, {data.shape[1]} kolom")
+st.write("Kolom:", list(data.columns))
 
 # Split data
 X = data.drop(columns=["Potability"])
@@ -93,7 +92,8 @@ for model_name, model in models.items():
 # Visualisasi Akurasi
 st.write("### Perbandingan Akurasi")
 fig, ax = plt.subplots(figsize=(8, 5))
-ax.bar(accuracies.keys(), accuracies.values(), color=["skyblue", "orange", "red"])
+colors = plt.cm.Paired.colors[:len(accuracies)]
+ax.bar(accuracies.keys(), accuracies.values(), color=colors)
 ax.set_ylim(0, 1)
 ax.set_title("Perbandingan Akurasi Model")
 ax.set_ylabel("Akurasi")
