@@ -37,7 +37,7 @@ def set_styles_with_shadow(url):
             background-repeat: no-repeat;
         }}
         .stApp * {{
-            color: red; /* Warna teks tetap merah */
+            color: blue; /* Warna biru */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Menambahkan bayangan gelap pada teks */
         }}
         </style>
