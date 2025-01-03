@@ -37,7 +37,7 @@ def set_styles_with_thick_shadow(url):
             background-repeat: no-repeat;
         }}
         .stApp * {{
-            color: blue; /* Warna teks biru */
+            color: gray; /* Warna teks abu-abu */
             text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Bayangan lebih tebal */
         }}
         </style>
