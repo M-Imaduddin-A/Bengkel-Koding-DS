@@ -47,6 +47,7 @@ def set_styles(url):
 
 # Background custom dengan URL
 set_background("https://images7.alphacoders.com/926/926408.png")
+set_styles("https://images7.alphacoders.com/926/926408.png")
 
 # Judul aplikasi
 st.title("Evaluasi Model Klasifikasi Kualitas Air")
