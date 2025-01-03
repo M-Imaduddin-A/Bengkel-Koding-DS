@@ -10,8 +10,29 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, confusion_matrix
 
-# Set halaman
+# Tambahkan CSS untuk mengganti background
+def set_background(url):
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url({url});
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Background custom dengan URL
+set_background("https://images7.alphacoders.com/926/926408.png")
+
+# Judul aplikasi
 st.title("Evaluasi Model Klasifikasi Kualitas Air")
+st.write("Selamat datang di aplikasi analisis kualitas air!")
+
 
 # Fungsi untuk menampilkan confusion matrix
 def plot_confusion_matrix(cm, labels):
