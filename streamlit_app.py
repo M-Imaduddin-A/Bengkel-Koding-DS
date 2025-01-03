@@ -25,7 +25,7 @@ def plot_confusion_matrix(cm, labels):
 # Memuat dataset
 @st.cache
 def load_data_from_github():
-    url = "https://github.com/M-Imaduddin-A/Bengkel-Koding-DS/blob/main/data/water_potability.csv"
+    url = "https://raw.githubusercontent.com/M-Imaduddin-A/Bengkel-Koding-DS/main/water_potability.csv"
     try:
         data = pd.read_csv(url)
         return data
