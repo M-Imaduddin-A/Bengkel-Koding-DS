@@ -39,8 +39,9 @@ def set_styles_with_thick_shadow(url):
             background-repeat: no-repeat;
         }}
         .stApp * {{
-            color: #003366; /* Biru gelap */
-            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8); /* Bayangan putih */
+           color: #000000; /* Hitam pekat */
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8); /* Bayangan putih */
+}
         }}
         </style>
         """,
